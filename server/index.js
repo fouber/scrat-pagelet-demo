@@ -14,6 +14,7 @@ process.on('uncaughtException', function (err) {
 app.set('name', meta.name);
 app.set('version', meta.version);
 app.set('port', process.env.PORT || 5000);
+app.set('host', process.env.IP || '127.0.0.1');
 app.set('root', root);
 app.set('logger', console);
 app.enable('trust proxy');
@@ -65,7 +66,7 @@ app.use('/:page', middleware.render);
 app.use(middleware.error);
 
 if (require.main === module) {
-    app.listen(app.get('port'), function () {
+    app.listen(app.get('port'), app.get('host'), function () {
         console.log('[%s] Express server listening on port %d',
             app.get('env').toUpperCase(), app.get('port'));
     });

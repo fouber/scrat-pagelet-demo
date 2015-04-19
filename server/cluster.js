@@ -13,7 +13,7 @@ if (cluster.isMaster) {
         cluster.fork();
     });
 } else {
-    app.listen(app.get('port'), function () {
+    app.listen(app.get('port'), app.get('host'), function () {
         console.log('[%s] Express server listening on port %d',
             app.get('env').toUpperCase(), app.get('port'));
     });

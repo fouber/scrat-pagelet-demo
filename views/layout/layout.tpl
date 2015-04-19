@@ -19,7 +19,7 @@
         {# 引用模块 #}
         {% require "../lib/pure/pure.css" %}
         {% require "./layout.css" %}
-        {% require "../lib/zepto.js" %}
+        {% require "../lib/jquery.js" %}
         {% require "../lib/pagelet.js" %}
         {% require "../lib/md.js" %}
         {# 页面中执行的脚本 #}
