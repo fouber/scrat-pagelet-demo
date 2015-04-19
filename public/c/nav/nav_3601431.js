@@ -1,0 +1,1 @@
+define("components/nav/nav.js",function(){pagelet.router("/:page",function(a,e,n,t){/^\w+$/.test(a.page)&&($(".nav a[data-name]").removeClass("active"),$('.nav a[data-name="'+a.page+'"]').addClass("active")),t()})});
