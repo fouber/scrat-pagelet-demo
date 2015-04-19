@@ -1,0 +1,37 @@
+.index-nav {
+    position: absolute;
+    background: rgb(37, 42, 58);
+    text-align: center;
+    width: 150px;
+    top: 0;
+    left: 0;
+    height: 100%;
+    overflow: auto;
+}
+
+.index-main {
+    position: absolute;
+    left: 150px;
+    top: 0;
+    right: 0;
+    height: 100%;
+}
+
+.index-list {
+    position: absolute;
+    width: 350px;
+    left: 0;
+    top: 0;
+    height: 100%;
+    overflow: auto;
+    border-right: 1px solid #ddd;
+}
+
+.index-detail {
+    position: absolute;
+    left: 351px;
+    top: 0;
+    right: 0;
+    height: 100%;
+    overflow: auto;
+}

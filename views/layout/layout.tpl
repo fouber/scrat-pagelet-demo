@@ -13,15 +13,15 @@
         <meta name="screen-orientation" content="portrait">
         <meta name="x5-orientation" content="portrait">
         <meta name="msapplication-tap-highlight" content="no">
-        <link rel="icon" href="/public/v/layout/favicon.ico" />
+        <link rel="icon" href="favicon.ico" />
         {# title需要使用title标签包裹起来 #}
         {% title %}{{ title }}{% endtitle %}
         {# 引用模块 #}
-        {% require "views/lib/pure/pure.css" %}
-        {% require "views/layout/layout.css" %}
-        {% require "views/lib/zepto.js" %}
-        {% require "views/lib/pagelet.js" %}
-        {% require "views/lib/md.js" %}
+        {% require "../lib/pure/pure.css" %}
+        {% require "./layout.css" %}
+        {% require "../lib/zepto.js" %}
+        {% require "../lib/pagelet.js" %}
+        {% require "../lib/md.js" %}
         {# 页面中执行的脚本 #}
         {% script %}
             // 监听页面点击事件，自动加载pagelet
@@ -34,5 +34,5 @@
         {% endpagelet %}
         {% require 'progress' %}
     {% endbody %}
-    
+    <!--livereload-->
 {% endhtml %}

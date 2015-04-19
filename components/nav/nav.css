@@ -1,0 +1,46 @@
+/**
+ * @require email/email.css
+ */
+
+/* Make the navigation 100% width on phones */
+.nav {
+    width: 100%;
+    height: 40px;
+    position: relative;
+    background: rgb(37, 42, 58);
+    text-align: center;
+    display: block;
+    padding: 2em 0;
+}
+/* Show the "Menu" button on phones */
+.nav .nav-menu-button {
+    display: block;
+    top: 0.5em;
+    right: 0.5em;
+    position: absolute;
+}
+
+
+/*
+ * -- NAV BAR STYLES --
+ * Styling the default .pure-menu to look a little more unique.
+ */
+.nav .pure-menu {
+    background: transparent;
+    border: none;
+    text-align: left;
+}
+.nav .pure-menu-link.active,
+.nav .pure-menu-link:hover,
+.nav .pure-menu-link:focus {
+    background: rgb(55, 60, 90);
+}
+.nav .pure-menu-link {
+    color: #fff;
+    margin-left: 0.5em;
+}
+.nav .pure-menu-heading {
+    border-bottom: none;
+    font-size:110%;
+    color: rgb(75, 113, 151);
+}

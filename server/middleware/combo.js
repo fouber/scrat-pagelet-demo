@@ -38,14 +38,12 @@ module.exports = function (options, app, PROD) {
                     var filePath = path.resolve(root, file), content;
                     try {
                         content = fs.readFileSync(filePath, 'utf-8');
-                    } catch (e) {
-                        logger.error('[combo] cannot read file: ' + filePath + '\n', e.stack);
-                    }
-                    if (content) {
                         contents.push(content);
                         if(useCache){
                             cached[file] = content;
                         }
+                    } catch (e) {
+                        logger.error('[combo] cannot read file: ' + filePath + '\n', e.stack);
                     }
                 }
             });

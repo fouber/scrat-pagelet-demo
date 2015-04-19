@@ -1,0 +1,17 @@
+.progress {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    display: none;
+}
+
+.progress-inner {
+    height: 2px;
+    width: 0;
+    background: #e9322d;
+    -webkit-transition: width 0.3s cubic-bezier(0.21, 0.64, 0.82, 0.32);
+    transition: width 0.3s cubic-bezier(0.21, 0.64, 0.82, 0.32);
+    opacity: 0.9;
+}

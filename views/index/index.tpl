@@ -15,5 +15,5 @@
             {% endpagelet %}
         {% endif %}
     {% endpagelet %}
-    {% require 'views/index/index.css' %}
+    {% require './index.css' %}
 {% endblock %}

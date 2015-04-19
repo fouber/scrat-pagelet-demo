@@ -1,0 +1,8 @@
+/*
+ * @require email/email.css
+ */
+
+.list a {
+    color: inherit;
+    display: block;
+}

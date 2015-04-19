@@ -1,1 +1,0 @@
-define("components/list/list.js",function(){pagelet.router(/^\/(\w+)(?:\?detail=(.*))?$/,function(e,i,t,a){$(".list .email-item[data-id]").removeClass("email-item-selected"),a()}),pagelet.router("/:page?detail=:id",function(e,i,t,a){$('.list .email-item[data-id="'+e.id+'"]').removeClass("email-item-unread").addClass("email-item-selected"),a()})});
