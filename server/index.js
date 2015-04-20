@@ -3,6 +3,7 @@
 var meta = require('../package.json'),
     express = require('express'),
     path = require('path'),
+    compress = require('compression'),
     app = module.exports = express(),
     root = path.resolve(__dirname, '../').replace(/\/+$/, ''),
     PROD = (app.get('env') || '').toLocaleLowerCase() === 'production';
@@ -56,7 +57,7 @@ for (var key in middleware) {
         });
     }
 }
-//app.use(compress()); //Use gzip in nginx, instead of in nodejs.
+app.use(compress()); //Use gzip in nginx, instead of in nodejs.
 app.use('/co', middleware.combo);
 app.use('/public', middleware.static);
 // app.use('/api/*', middleware.proxy);

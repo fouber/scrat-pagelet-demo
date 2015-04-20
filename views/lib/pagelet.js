@@ -465,7 +465,7 @@
                 url: global.location.href,
                 title: document.title
             };
-            global.history.replaceState(state);
+            global.history.replaceState(state, state.title, state.url);
         }
         setPagelets(state.url, options.url, options.pagelets);
         var fn = options.replace ? 'replaceState' : 'pushState';
@@ -524,7 +524,7 @@
                     url: global.location.href,
                     title: document.title
                 };
-                global.history.replaceState(state);
+                global.history.replaceState(state, state.title, state.url);
             }
             pagelet.load(opt);
             var push = xhr.readyState > 0 ? pagelet.pushState(options) : noop;
