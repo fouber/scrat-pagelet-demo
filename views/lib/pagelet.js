@@ -13,6 +13,8 @@
     var combo = false;
     // 默认的combo请求格式
     var DEFAULT_COMBO_PATTERN = '/co??%s';
+    // combo url 长度限制
+    var maxUrlLength = 2000;
     // combo请求格式，不用设置该项目，构建工具会生成
     var comboPattern = DEFAULT_COMBO_PATTERN;
     // 是否支持Html5的PushState
@@ -34,10 +36,20 @@
         var isCss = type === 'css';
         var node = document.createElement(isScript ? 'script' : 'link');
         var supportOnload = 'onload' in node;
-        var tid = setTimeout(function () {
+        var done = function(err){
             clearTimeout(tid);
             clearInterval(intId);
-            callback('timeout');
+            if(node){
+                node.onload = node.onreadystatechange = noop;
+                if (isScript && head && node.parentNode) {
+                    head.removeChild(node);
+                }
+                node = null;
+            }
+            callback('err');
+        };
+        var tid = setTimeout(function () {
+            done('timeout');
         }, TIMEOUT);
         var intId;
         if (isScript) {
@@ -52,28 +64,20 @@
         }
         node.onload = node.onreadystatechange = function () {
             if (node && (!node.readyState || /loaded|complete/.test(node.readyState))) {
-                clearTimeout(tid);
-                node.onload = node.onreadystatechange = noop;
-                if (isScript && head && node.parentNode) head.removeChild(node);
-                callback();
-                node = null;
+                done();
             }
         };
         node.onerror = function (e) {
-            clearTimeout(tid);
-            clearInterval(intId);
             e = (e || {}).error || new Error('load resource timeout');
             e.message = 'Error loading [' + url + ']: ' + e.message;
-            callback(e);
+            done(e);
         };
         head.appendChild(node);
         if (isCss) {
             if (isOldWebKit || !supportOnload) {
                 intId = setInterval(function () {
                     if (node.sheet) {
-                        clearTimeout(id);
-                        clearInterval(intId);
-                        callback();
+                        done();
                     }
                 }, 20);
             }
@@ -104,9 +108,20 @@
             });
             if (collect.length) {
                 if (combo) {
-                    var uri = collect.join(',');
+                    var comboUrl = '';
+                    collect.forEach(function(uri){
+                        if(comboUrl.length + comboPattern.length + uri.length > maxUrlLength){
+                            result.push({
+                                uri: comboPattern.replace('%s', comboUrl.substring(1)),
+                                type: type
+                            });
+                            comboUrl = ',' + uri;
+                        } else {
+                            comboUrl += ',' + uri;
+                        }
+                    });
                     result.push({
-                        uri: comboPattern.replace('%s', uri),
+                        uri: comboPattern.replace('%s', comboUrl.substring(1)),
                         type: type
                     });
                 } else {
@@ -145,8 +160,9 @@
     function abortXHR(xhr) {
         if ( xhr && xhr.readyState < 4) {
             xhr.onreadystatechange = noop;
-            xhr.abort()
+            xhr.abort();
         }
+        clearTimeout(xhrTimer);
     }
 
     /**
@@ -254,6 +270,7 @@
      * 建立pagelet跳转映射表
      * @param from{String}
      * @param to{String}
+     * @param pagelets{Array}
      */
     function setPagelets(from, to, pagelets){
         from = normalize(from);
@@ -262,7 +279,7 @@
         historyMap[to + MAP_CONCATOR + from] = pagelets;
     }
 
-    var xhr, state,
+    var xhr, state, xhrTimer,
         listeners = {},
         routers = [],
         historyMap = {},
@@ -354,6 +371,14 @@
     };
 
     /**
+     * 设置加载超时时间
+     * @param time {Number}
+     */
+    pagelet.timeout = function(time){
+        TIMEOUT = time >> 0;
+    };
+
+    /**
      * 加载pagelet
      * @param options{Object}
      */
@@ -367,6 +392,7 @@
         if (pagelets && pagelets.length) {
             pagelet.emit(pagelet.EVENT_BEFORE_LOAD, { options: options });
             var callback = function(err, data, done){
+                clearTimeout(xhrTimer);
                 callback = noop;
                 if(err){
                     pagelet.emit(pagelet.EVENT_LOAD_ERROR, { options: options, error: err });
@@ -449,6 +475,9 @@
             xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
             xhr.setRequestHeader('X-Pagelets', pagelets.join(','));
             xhr.send();
+            xhrTimer = setTimeout(function(){
+                callback('timeout');
+            }, options.timeout || TIMEOUT);
         } else {
             location.href = url;
         }
@@ -590,7 +619,7 @@
                                             dom.innerHTML = html[key];
                                             dom = null;
                                         } else {
-                                            throw new Error('undefined parent dom [' + key + ']');
+                                            console.error('undefined parent dom [' + key + ']');
                                         }
                                     }
                                 }
@@ -615,6 +644,8 @@
                     if (location.protocol !== target.protocol || location.hostname !== target.hostname) return;
                     var pagelets = target.getAttribute('data-pagelets');
                     var mode = (target.getAttribute('data-insert-type') || 'replace').toLocaleLowerCase();
+                    var historyReplace = target.getAttribute('data-history-replace');
+                    historyReplace = historyReplace !== null && (historyReplace === '' || /^(yes|1|true)$/i.test(historyReplace));
                     var href = target.getAttribute('href');
                     pagelets = (pagelets || '').split(/\s*,\s*/).filter(filter);
                     if (href && pagelets.length > 0) {
@@ -623,7 +654,7 @@
                         var opt = {};
                         opt.url = href;
                         opt.pagelets = pagelets;
-                        opt.replace = mode === 'prepend' || mode === 'append';
+                        opt.replace = historyReplace || mode === 'prepend' || mode === 'append';
                         opt.error = function(){
                             location.replace(href);
                         };
@@ -653,7 +684,7 @@
                                             }
                                             dom = null;
                                         } else {
-                                            throw new Error('undefined parent dom [' + key + ']');
+                                            console.error('undefined parent dom [' + key + ']');
                                         }
                                     }
                                 }

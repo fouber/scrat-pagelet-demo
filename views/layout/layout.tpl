@@ -15,13 +15,13 @@
         <meta name="msapplication-tap-highlight" content="no">
         <link rel="icon" href="favicon.ico" />
         {# title需要使用title标签包裹起来 #}
-        {% title %}{{ title }}{% endtitle %}
+        {% title %}{{title}}{% endtitle%}
         {# 引用模块 #}
-        {% require "../lib/pure/pure.css" %}
-        {% require "./layout.css" %}
-        {% require "../lib/jquery.js" %}
-        {% require "../lib/pagelet.js" %}
-        {% require "../lib/md.js" %}
+        {% require $id="../lib/pure/pure.css" %}
+        {% require $id="./layout.css" %}
+        {% require $id="../lib/zepto.js" %}
+        {% require $id="../lib/pagelet.js" %}
+        {% require $id="../lib/md.js" %}
         {# 页面中执行的脚本 #}
         {% script %}
             // 监听页面点击事件，自动加载pagelet
@@ -32,7 +32,7 @@
         {% pagelet $id="layout" class="layout" %} {# 最外层pagelet #}
             {% block body %}{# 用于继承的block区域 #}{% endblock %}
         {% endpagelet %}
-        {% require 'progress' %}
+        {% require $id='progress' %}
     {% endbody %}
     <!--livereload-->
 {% endhtml %}
