@@ -1,8 +1,9 @@
-pagelet.router('/:page', function(ctx, options, event, next){
-    if(/^\w+$/.test(ctx.page)){
+pagelet.router(/^\/(\w+)/, function(ctx, options, event, next){
+    var page = ctx[1];
+    if(/^\w+$/.test(page)){
         $('.nav a[data-name]')
             .removeClass('active');
-        $('.nav a[data-name="' + ctx.page + '"]')
+        $('.nav a[data-name="' + page + '"]')
             .addClass('active');
     }
     next();
