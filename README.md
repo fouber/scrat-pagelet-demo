@@ -8,7 +8,7 @@
 
 运行说明：
 
-## 安装scrat
+## 安装scrat (v0.4.6或以上版本)
 
 ```bash
 npm install -g scrat
